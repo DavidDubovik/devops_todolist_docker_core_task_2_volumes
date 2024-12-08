@@ -1,60 +1,58 @@
-# Інструкція для запуску контейнера MySQL та програми
+# Instruction for Running MySQL Container and Application
 
-## 1. Запуск контейнера MySQL
+## 1. Running MySQL Container
 
-Щоб запустити контейнер з MySQL, виконайте наступні кроки:
+To run the MySQL container, follow these steps:
 
-1. **Побудуйте образ MySQL** з Dockerfile, якщо ви ще не зробили цього:
+1. **Build the MySQL image** from the Dockerfile if you haven't done it yet:
 
     ```bash
     docker build -t salo2452/mysql-local:1.0.0 .
     ```
 
-2. **Запустіть контейнер MySQL** з приєднаним томом для зберігання даних:
+2. **Run the MySQL container** with a mounted volume for data storage:
 
     ```bash
     docker run -d --name mysql-container -v mysql-data:/var/lib/mysql -p 3306:3306 salo2452/mysql-local:1.0.0
     ```
 
-    - `-d` — працювати в фоновому режимі.
-    - `--name mysql-container` — вказуємо ім'я контейнера.
-    - `-v mysql-data:/var/lib/mysql` — створюємо том для зберігання даних MySQL.
-    - `-p 3306:3306` — відкриваємо порт 3306 для доступу до MySQL з зовнішнього середовища.
+    - `-d` — run in detached mode.
+    - `--name mysql-container` — specify the container name.
+    - `-v mysql-data:/var/lib/mysql` — create a volume for MySQL data storage.
+    - `-p 3306:3306` — open port 3306 for external MySQL access.
 
-## 2. Запуск контейнера програми
+## 2. Running the Application Container
 
-1. Оновіть конфігурацію вашої програми для підключення до контейнера MySQL. Використовуйте IP-адресу контейнера MySQL для підключення. Ви можете дізнатися IP-адресу контейнера за допомогою наступної команди:
+1. Update your application's configuration to connect to the MySQL container. Use the IP address of the MySQL container for the connection. You can find the IP address of the container with this command:
 
     ```bash
     docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mysql-container
     ```
 
-2. **Побудуйте образ програми**:
+2. **Build the application image**:
 
     ```bash
     docker build -t salo2452/todoapp:2.0.0 .
     ```
 
-3. **Запустіть контейнер програми** та підключіть його до контейнера MySQL:
+3. **Run the application container** and link it to the MySQL container:
 
     ```bash
     docker run -d --name todoapp-container --link mysql-container:mysql -p 8000:8000 salo2452/todoapp:2.0.0
     ```
 
-    - `--link mysql-container:mysql` — дозволяє контейнеру програми підключатися до контейнера MySQL.
-    - `-p 8000:8000` — відкриває порт 8000 для доступу до програми через браузер.
+    - `--link mysql-container:mysql` — allows the application container to connect to the MySQL container.
+    - `-p 8000:8000` — opens port 8000 for accessing the application through the browser.
 
-## 3. Доступ до програми через браузер
+## 3. Accessing the Application via Browser
 
-Щоб отримати доступ до вашої програми, відкрийте браузер і перейдіть за адресою:
+To access your application, open a browser and go to:
 
+## 4. Your Images on Docker Hub
 
-## 4. Ваші образи на Docker Hub
+- **MySQL Image**: [salo2452/mysql-local:1.0.0](https://hub.docker.com/r/salo2452/mysql-local)
+- **Application**: [salo2452/todoapp:2.0.0](https://hub.docker.com/r/salo2452/todoapp)
 
-- **MySQL образ**: [salo2452/mysql-local:1.0.0](https://hub.docker.com/r/salo2452/mysql-local)
-- **Програма**: [salo2452/todoapp:2.0.0](https://hub.docker.com/r/salo2452/todoapp)
+## 5. Creating a Pull Request
 
-## 5. Створення PR
-
-1. Створіть Pull Request з вашими змінами на платформі для перевірки.
-
+1. Create a Pull Request with your changes on the platform for review.
